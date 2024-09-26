@@ -1,7 +1,7 @@
 using HorizonSideRobots
 robot = Robot(animate=true)
 
-function mark_perimeter!(robot)
+function main!(robot)
     steps = go_to_angle!(robot)
     mark_perimeter!(robot)
     back!(robot,steps)
