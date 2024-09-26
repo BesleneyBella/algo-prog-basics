@@ -36,10 +36,8 @@ function mark_perimeter!(robot)
 end
 
 function back!(robot,steps)
-    m = steps
-    m = m[end:-1:1]
-    side = length(m)%2 == 0 ? Ost : Nord
-    for i in m
+    side = length(steps)%2 == 0 ? Ost : Nord
+    for i in steps[end:-1:1]
         while i>0
             move!(robot,side)
             i-=1
