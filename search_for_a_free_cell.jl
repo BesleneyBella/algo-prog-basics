@@ -1,5 +1,5 @@
 using HorizonSideRobots
-robot = Robot(animate=true,10,20)
+robot = Robot(animate=true)
 
 function search_for_a_free_cell!(robot)
     counter = 1
