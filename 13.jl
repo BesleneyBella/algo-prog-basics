@@ -34,7 +34,7 @@ HorizonSideRobots.move!(robot::ChessRobot,side,n)= begin
 end
 
 function main!(robot)
-    x,y = go_to_angle!(getbaserobot(robot))
+    x,y = go_to_angle!(robot)
     calculation(robot,x,y)
     snake!(robot, (Ost,Nord))
     go_to_angle!(robot)
@@ -49,12 +49,17 @@ function calculation(robot::ChessRobot,x,y)
     robot.flag= ((x+y)%2==0)
 end
 
-function go_to_angle!(robot)
+function go_to_angle!(robot::Robot)
     x = movement!(robot,()->isborder(robot,West), West)
     y = movement!(robot,()->isborder(robot,Sud), Sud)
     return x, y
 end
 
+function go_to_angle!(robot::ChessRobot)
+    x = movement!(getbaserobot(robot),()->isborder(robot,West), West)
+    y = movement!(getbaserobot(robot),()->isborder(robot,Sud), Sud)
+    return x, y
+end
 inverse(side::HorizonSide)=HorizonSide((Int(side)+2)%4)
 
 function movement!(robot::Robot,stop_condition::Function,side)
