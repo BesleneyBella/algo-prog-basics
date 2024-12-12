@@ -1,5 +1,4 @@
-#Решить задачу 7 с использованием обобщённой функции
-#shuttle!(stop_condition::Function, robot, side)
+#Решить задачу 7 с использованием обобщённой функции shuttle!(stop_condition::Function, robot, side)
 
 using HorizonSideRobots
 robot = Robot(animate=true)
