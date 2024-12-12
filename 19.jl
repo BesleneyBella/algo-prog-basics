@@ -1,3 +1,5 @@
+#Написать рекурсивную функцию, перемещающую робота до упора в заданном направлении.
+
 using HorizonSideRobots
 robot = Robot(animate=true)
 function main!(robot,side::HorizonSide)
