@@ -1,0 +1,10 @@
+function vec_sum(vector::Vector,sum::Int,ind::Int)
+    if ind > length(vector)
+        return sum
+    end
+    return vec_sum(vector,sum+vector[ind],ind+1)
+end
+
+vector = [1, 2, 3, 4, 5]
+result = vec_sum(vector,0,1)
+println("Сумма элементов вектора: ", result)
