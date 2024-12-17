@@ -1,3 +1,5 @@
+#Написать рекурсивную функцию, суммирующую все элементы
+заданного вектора (реализовать хвостовую рекурсию).
 function vec_sum(vector::Vector,sum::Int,ind::Int)
     if ind > length(vector)
         return sum
