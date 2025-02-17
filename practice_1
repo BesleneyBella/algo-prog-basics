@@ -1,0 +1,9 @@
+function sigma(a)
+    n=a_sum=a_sum_squar=zero(eltype(a))
+    for i in a
+        n+=1
+        a_sum += i^2
+        a_sum_squar += i
+    end
+    return( ((1/n)*a_sum - (1/ (n^2) )*((a_sum_squar)^2))^0.5)
+end
