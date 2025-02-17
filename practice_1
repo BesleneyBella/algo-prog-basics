@@ -1,3 +1,4 @@
+#1)
 function sigma(a)
     n=a_sum=a_sum_squar=zero(eltype(a))
     for i in a
@@ -6,4 +7,20 @@ function sigma(a)
         a_sum_squar += i
     end
     return( ((1/n)*a_sum - (1/ (n^2) )*((a_sum_squar)^2))^0.5)
+end
+#2)
+function max_subarray_sum(arr)
+    max_sum = minimum(eltype(arr))  # Инициализируем максимальную сумму минимальным значением
+    current_sum = 0  # Текущая сумма
+
+    for num in arr
+        current_sum += num 
+        if current_sum > max_sum
+            max_sum = current_sum 
+        end
+        if current_sum < 0
+            current_sum = 0 
+        end
+    end
+    return max_sum
 end
