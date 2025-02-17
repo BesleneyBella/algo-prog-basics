@@ -24,3 +24,11 @@ function max_subarray_sum(arr)
     end
     return max_sum
 end
+#3)
+function polynomial(arr,x)
+    poly_val = arr[begin]
+    for a in Iterators.drop(arr, 1) 
+        poly_val = poly_val*x + a
+    end
+    return poly_val
+end
