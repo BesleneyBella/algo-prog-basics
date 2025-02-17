@@ -10,7 +10,7 @@ function sigma(a)
 end
 #2)
 function max_subarray_sum(arr)
-    max_sum = minimum(eltype(arr))  # Инициализируем максимальную сумму минимальным значением
+    max_sum = minimum(eltype(arr))
     current_sum = 0  # Текущая сумма
 
     for num in arr
