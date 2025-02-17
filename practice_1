@@ -1,14 +1,4 @@
 #1)
-function sigma(a)
-    n=a_sum=a_sum_squar=zero(eltype(a))
-    for i in a
-        n+=1
-        a_sum += i^2
-        a_sum_squar += i
-    end
-    return( ((1/n)*a_sum - (1/ (n^2) )*((a_sum_squar)^2))^0.5)
-end
-#2)
 function max_subarray_sum(arr)
     max_sum = minimum(eltype(arr))
     current_sum = 0  # Текущая сумма
@@ -23,6 +13,16 @@ function max_subarray_sum(arr)
         end
     end
     return max_sum
+end
+#2)
+function sigma(a)
+    n=a_sum=a_sum_squar=zero(eltype(a))
+    for i in a
+        n+=1
+        a_sum += i^2
+        a_sum_squar += i
+    end
+    return( ((1/n)*a_sum - (1/ (n^2) )*((a_sum_squar)^2))^0.5)
 end
 #3)
 function polynomial(arr,x)
