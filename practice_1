@@ -42,3 +42,22 @@ function polynomial_diff(arr,x)
     end
     return poly_val, poly_diff
 end
+#5)
+function extended_euclid(a::T, b::T)
+    x0,x1 = one(T), zero(T)
+    y0,y1 = zero(T),one(T)
+
+    while !iszero(b)
+        # Вычисляем целочисленное деление и остаток
+        q = a ÷ b  # Частное
+        r = a % b   # Остаток
+        
+        # Обновляем a и b
+        a, b = b, r
+        
+        # Обновляем коэффициенты x и y
+        x0, x1 = x1, x0 - q * x1
+        y0, y1 = y1, y0 - q * y1
+    end
+    return a, x0, y0
+end
