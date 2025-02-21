@@ -61,3 +61,27 @@ function extended_euclid(a::T, b::T)
     end
     return a, x0, y0
 end
+#6)
+struct Residue{T,M}
+    value::T
+
+    Residue{T, M}(value::T) where {T, M} = new(value % M)
+end
+
+function Base. +(r1::Residue{T,M},r2::Residue{T,M})where {T, M}
+    return Residue{T,M}((r1.value+r2.value) % M)
+end
+
+function Base. *(r1::Residue{T, M}, r2::Residue{T, M}) where {T, M}
+    return Residue{T, M}((r1.value * r2.value) % M)
+end
+
+function Base. -(r1::Residue{T,M},r2::Residue{T,M})where {T, M}
+    return Residue{T,M}((r1.value-r2.value) % M)
+end
+r1 = Residue{Int, 5}(4)
+r2 = Residue{Int, 5}(3)
+
+println(r1 + r2)
+println(r1 - r2)
+println(r1 * r2)
