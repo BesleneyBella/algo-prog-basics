@@ -86,7 +86,6 @@ println(r1 + r2)
 println(r1 - r2)
 println(r1 * r2)
 #7)
-#7)
 struct Polynomial{T}
     coeff:: Vector{T}
     function Polynomial(coeff)
