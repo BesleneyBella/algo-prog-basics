@@ -86,3 +86,109 @@ println(r1 + r2)
 println(r1 - r2)
 println(r1 * r2)
 #7)
+#7)
+struct Polynomial{T}
+    coeff:: Vector{T}
+    function Polynomial(coeff)
+        n = length(coeff)
+        while n>0 && iszero(coeff[n])
+            n-=1
+        end
+        new{eltype(coeff)}(coeff[1:n])
+    end
+end
+
+ord(p::Polynomial)=length(p.coeff)-1
+
+function Base.:+(p1::Polynomial{T}, p2::Polynomial{T}) where {T}
+    n1 = ord(p1)
+    n2 = ord(p2)
+    if n1>=n2
+        n = copy(p1.coeff)
+        n[1:n2+1].+=p2.coeff
+    else
+        n = copy(p2.coeff)
+        n[1:n1+1].+=p1.coeff
+    end 
+    return Polynomial(n)
+end
+function Base.:*(p1::Polynomial{T}, p2::Polynomial{T}) where {T}
+    n1 = ord(p1)
+    n2 = ord(p2)
+    coeffs = zeros(T, n1 + n2 + 1)
+    for i in eachindex(p1.coeff)
+        for j in eachindex(p2.coeff)
+            coeffs[i + j - 1] += p1.coeff[i] * p2.coeff[j]
+        end
+    end
+    return Polynomial(coeffs)
+end
+function (p::Polynomial)(x)
+    val=zero(eltype(p.coeff))
+    for i in eachindex(p.coeff)
+        val+= p.coeff[i] * x^(i-1)
+    end
+    return val
+end
+# Реализация кольца вычетов для коэффициентов
+struct ResidueRing{T}
+    value::T
+    modulus::T
+    function ResidueRing(value::T, modulus::T) where {T}
+        new{T}(mod(value, modulus), modulus)
+    end
+end
+function Base.:-(p1::Polynomial{T}, p2::Polynomial{T}) where {T}
+    n1 = ord(p1)
+    n2 = ord(p2)
+    if n1 >= n2
+        n = copy(p1.coeff)
+        n[1:n2+1] .-= p2.coeff
+    else
+        n = -copy(p2.coeff)
+        n[1:n1+1] .+= p1.coeff
+    end
+    return Polynomial(n)
+end
+# Операции в кольце вычетов
+Base.:+(a::ResidueRing{T}, b::ResidueRing{T}) where {T} = ResidueRing(mod(a.value + b.value, a.modulus), a.modulus)
+Base.:*(a::ResidueRing{T}, b::ResidueRing{T}) where {T} = ResidueRing(mod(a.value * b.value, a.modulus), a.modulus)
+
+# Кольцо вычетов многочленов (модуль — многочлен)
+struct PolynomialRing{T}
+    p::Polynomial{T}
+    modulus::Polynomial{T}
+    function PolynomialRing(p::Polynomial{T}, modulus::Polynomial{T}) where {T}
+        # Приводим многочлен по модулю
+        while ord(p) >= ord(modulus)
+            shift = ord(p) - ord(modulus)
+            coeff = zeros(T, shift + 1)
+            coeff[end] = p.coeff[end] / modulus.coeff[end]  # Коэффициент для вычитания
+            p = p - Polynomial(coeff) * modulus
+        end
+        new{T}(p, modulus)
+    end
+end
+
+# Операции в кольце вычетов многочленов
+function Base.:+(a::PolynomialRing{T}, b::PolynomialRing{T}) where {T}
+    PolynomialRing(a.p + b.p, a.modulus)
+end
+function Base.:*(a::PolynomialRing{T}, b::PolynomialRing{T}) where {T}
+    PolynomialRing(a.p * b.p, a.modulus)
+end
+
+p1 = Polynomial([1, 2, 3])  # 1 + 2x + 3x^2
+p2 = Polynomial([0, 1, 4])  # x + 4x^2
+p4 = p1 + p2
+println("p1 + p2 =", p4.coeff)
+println(p1(0))
+r1 = ResidueRing(5, 3) 
+r2 = ResidueRing(7, 3)
+println("r1 + r2 = ", r1 + r2)
+println("r1 * r2 = ", r1 * r2)
+modulus = Polynomial([1, 0, 1])  # x^2 + 1
+pr1 = PolynomialRing(Polynomial([1, 2]), modulus)
+pr2 = PolynomialRing(Polynomial([0, 1]), modulus)
+println("pr1 + pr2 = ", pr1 + pr2)
+println("pr1 * pr2 = ", pr1 * pr2)
