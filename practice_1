@@ -36,7 +36,7 @@ end
 #Q_n' = Q_(n-1)'*x + Q_(n-1)*x' = Q_(n-1)'*x + Q_(n-1)
 function polynomial_diff(arr,x)
     poly_val = poly_diff = zero(eltype(arr))
-    for a in Iterators.drop(arr, 1) 
+    for a in arr 
         poly_diff = poly_diff*x + poly_val
         poly_val = poly_val*x + a
     end
