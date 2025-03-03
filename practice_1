@@ -154,13 +154,13 @@ function (p::Polynomial)(x)
     return val
 end
 # Реализация кольца вычетов для коэффициентов
-struct ResidueRing{T}
+struct ResidueRing{T, M}
     value::T
-    modulus::T
-    function ResidueRing(value::T, modulus::T) where {T}
-        new{T}(mod(value, modulus), modulus)
+    function ResidueRing{T, M}(value::T) where {T, M}
+        new{T, M}(mod(value, M))
     end
 end
+ResidueRing(value::T, modulus::M) where {T, M} = ResidueRing{T, modulus}(value)
 function Base.:-(p1::Polynomial{T}, p2::Polynomial{T}) where {T}
     n1 = ord(p1)
     n2 = ord(p2)
@@ -174,9 +174,12 @@ function Base.:-(p1::Polynomial{T}, p2::Polynomial{T}) where {T}
     return Polynomial(n)
 end
 # Операции в кольце вычетов
-Base.:+(a::ResidueRing{T}, b::ResidueRing{T}) where {T} = ResidueRing(mod(a.value + b.value, a.modulus), a.modulus)
-Base.:*(a::ResidueRing{T}, b::ResidueRing{T}) where {T} = ResidueRing(mod(a.value * b.value, a.modulus), a.modulus)
-
+function Base.:+(a::ResidueRing{T, M}, b::ResidueRing{T, M}) where {T, M}
+    ResidueRing{T, M}(a.value + b.value)
+end
+function Base.:*(a::ResidueRing{T, M}, b::ResidueRing{T, M}) where {T, M}
+    ResidueRing{T, M}(a.value * b.value)
+end
 # Кольцо вычетов многочленов (модуль — многочлен)
 struct PolynomialRing{T}
     p::Polynomial{T}
