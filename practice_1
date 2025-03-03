@@ -68,6 +68,30 @@ struct Residue{T,M}
     Residue{T, M}(value::T) where {T, M} = new(value % M)
 end
 
+# Функция для нахождения обратного элемента через расширенный алгоритм Евклида
+function inv(r::Residue{T, M}) where {T, M}
+    a = r.value
+    m = M
+
+    # Инициализация переменных для расширенного алгоритма Евклида
+    x0, x1 = 1, 0
+    y0, y1 = 0, 1
+    while m != 0
+        q = a ÷ m
+        a, m = m, a % m
+        x0, x1 = x1, x0 - q * x1
+        y0, y1 = y1, y0 - q * y1
+    end
+
+    # Если a != 1, то обратного элемента не существует
+    if a != 1
+        throw(ArgumentError("Element is not invertible"))
+    end
+
+    # Возвращаем обратный элемент, приведенный по модулю M
+    return Residue{T, M}(x0 % M)
+end
+
 function Base. +(r1::Residue{T,M},r2::Residue{T,M})where {T, M}
     return Residue{T,M}((r1.value+r2.value) % M)
 end
